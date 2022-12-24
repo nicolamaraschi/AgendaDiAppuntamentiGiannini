@@ -11,6 +11,7 @@ import java.util.ArrayList;
 class AgendaTest {
     Appuntamento ap1,ap2,ap3,ap4,ap5,ap6;
     Agenda ag1,ag2, ag3,ag4,ag5;
+    ArrayList<Appuntamento> testListaAppuntamenti1,testListaAppuntamenti2, testListaAppuntamenti3;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
@@ -22,17 +23,17 @@ class AgendaTest {
          ap6= new Appuntamento(LocalDate.of(2020,12,16), LocalTime.of(7,4),30,"marco","milano");
 
 
-        ArrayList<Appuntamento> testListaAppuntamenti1;
+
         testListaAppuntamenti1.add(ap1);
         testListaAppuntamenti1.add(ap2);
         testListaAppuntamenti1.add(ap3);
         testListaAppuntamenti1.add(ap4);
 
-        ArrayList<Appuntamento> testListaAppuntamenti2;
+
         testListaAppuntamenti2.add(ap5);
         testListaAppuntamenti2.add(ap6);
 
-        ArrayList<Appuntamento> testListaAppuntamenti3;
+
         testListaAppuntamenti3.add(ap1);
         testListaAppuntamenti3.add(ap2);
         testListaAppuntamenti3.add(ap3);
@@ -56,7 +57,7 @@ class AgendaTest {
 
     @org.junit.jupiter.api.Test
     void cercaAppuntamentoPerData() {
-        Appuntamento app1 = ag1.cercaAppuntamentoPerData(ag1,LocalDate.of(2020,3,20), LocalTime.of(2,15),10,"giovanni","lorenteggio");
+        Appuntamento app1 = ag1.cercaAppuntamentoPerData(ag1,LocalDate.of(2020,3,20));
         Assert.assertEquals(app1,ap1);
     }
 
@@ -73,7 +74,7 @@ class AgendaTest {
 
     @org.junit.jupiter.api.Test
     void creaAgendaDaFile() {
-        ag1.creaAgendaDaFile();
+        ag1.creaAgendaDaFile(ag1);
         int size=ag1.getListaAgende().size();
         Assert.assertEquals(size,5);
     }
@@ -92,7 +93,7 @@ class AgendaTest {
 
     @org.junit.jupiter.api.Test
     void inserisciAppuntantoAllAgenda() {
-        ag1.inserisciAppuntantoAllAgenda(ag1,LocalDate.of(2020,3,20), LocalTime.of(2,15),10,"giovanni","lorenteggio");
+        ag1.inserisciAppuntantoAllAgenda(ag1,LocalDate.of(3,4,2020), LocalTime.of(2,15),10,"giovanni","lorenteggio");
         int size= ag1.getListaAgende().size();
         Assert.assertEquals(size,7);
 

@@ -2,6 +2,9 @@ package codice;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
+
 
 public class Appuntamento implements Comparable<Appuntamento> {
     LocalDate dataAppuntamento;
@@ -9,6 +12,7 @@ public class Appuntamento implements Comparable<Appuntamento> {
     int durataAppuntamento;
     String nomePersonaAppuntamento;
     String luogoAppuntamento;
+    GregorianCalendar dataGregoriana = GregorianCalendar.from(this.dataAppuntamento.atStartOfDay(ZoneId.systemDefault()));
 
     public Appuntamento(LocalDate dataAppuntamento, LocalTime orarioAppuntamento, int durataAppuntamento, String nomePersonaAppuntamento, String luogoAppuntamento) {
         this.dataAppuntamento = dataAppuntamento;
@@ -17,6 +21,10 @@ public class Appuntamento implements Comparable<Appuntamento> {
         if(durataAppuntamento<0 || durataAppuntamento>=60) throw new IllegalArgumentException();
         this.nomePersonaAppuntamento = nomePersonaAppuntamento;
         this.luogoAppuntamento = luogoAppuntamento;
+    }
+
+    public GregorianCalendar getDataGregoriana() {
+        return dataGregoriana;
     }
 
     public Appuntamento setDataAppuntamento(LocalDate dataAppuntamento) {
@@ -67,7 +75,7 @@ public class Appuntamento implements Comparable<Appuntamento> {
 
     @Override
     public String toString() {
-        return dataAppuntamento+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento;
+        return dataGregoriana+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento;
     }
 
     @Override

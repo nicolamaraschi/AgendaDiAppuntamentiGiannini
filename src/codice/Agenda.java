@@ -1,7 +1,5 @@
 package codice;
 
-import file.*;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +18,10 @@ public class Agenda implements  Iterable<Agenda>{
     public Agenda(ArrayList<Appuntamento> listaAppuntamentiDiUnAgenda, String nomeAgenda) {
         this.listaAppuntamentiDiUnAgenda = listaAppuntamentiDiUnAgenda;
         this.nomeAgenda = nomeAgenda;
+    }
+
+    public ArrayList<Appuntamento> getListaAppuntamentiDiUnAgenda() {
+        return listaAppuntamentiDiUnAgenda;
     }
 
     public Agenda(String nomeAgenda) {
@@ -43,7 +45,7 @@ public class Agenda implements  Iterable<Agenda>{
         if(nomePersona==null) throw new IllegalArgumentException("errore:nomePersona nulla");
         if(agenda==null) throw new IllegalArgumentException("errore:agenda non esistente");
         for (Appuntamento iteratore: agenda.listaAppuntamentiDiUnAgenda) {
-            if(iteratore.getNomePersonaAppuntamento()==nomePersona) return iteratore;
+            if(iteratore.getNomePersonaAppuntamento().equals(nomePersona)) return iteratore;
         }
         if(!agenda.listaAppuntamentiDiUnAgenda.contains(nomePersona)) throw new IllegalArgumentException("errore:non c'è nessuna persona con questo nome che ha fatto una prenotazione");
         return null;
@@ -64,7 +66,7 @@ public class Agenda implements  Iterable<Agenda>{
    public  void modificaAppuntamento(Agenda agenda, Appuntamento appuntamento){
         if(appuntamento==null) throw new IllegalArgumentException("errore:appuntamento nullo");
         if(!this.listaAppuntamentiDiUnAgenda.contains(appuntamento)) throw new IllegalArgumentException("errore:appuntamento non trovato");
-
+        agenda.getListaAppuntamentiDiUnAgenda().add(appuntamento);
    }
 
 
@@ -183,6 +185,7 @@ public class Agenda implements  Iterable<Agenda>{
         listaAppantumentiOrdinati.addAll(listaAppuntamentiDiUnAgenda);
        return listaAppantumentiOrdinati;
     }
+
 
     @Override
     public boolean equals(Object o) {
