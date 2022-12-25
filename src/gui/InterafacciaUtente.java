@@ -10,23 +10,20 @@ public class InterafacciaUtente {
     public static void main(String[] args) {
         Agenda agenda= new Agenda("nicola");
         Scanner scanner = new Scanner(System.in);
-        Scanner s1 = new Scanner(System.in);
         Scanner s = new Scanner(System.in);
-        int parolaScelta = 10;
+        int parolaScelta;
         while (true){
-
-
         do {
-            System.out.println("\n------------------------------------------------------------------------");
-            System.out.println("1:CREA AGENDA MEDIANTE NOME");
-            System.out.println("2.CANCELLA AGENDA");
-            System.out.println("3.CREA AGENDA MEDIANTE FILE APPUNTAMENTI");
-            System.out.println("4.SCRIVI AGENDA SU FILE");
-            System.out.println("5.INSERISCI NUOVO APPUNTAMENTO IN AGENDA");
-            System.out.println("6.MODIFICA I DATI DELL'APPUNTAMENTO");
-            System.out.println("7.CERCA APPUNTAMENTO MEDIANTE DATA");
-            System.out.println("8.CERCA APPUNTAMENTO MEDIANTE NOME PERSONA DI CUI SI HA L'APPUNTAMENTO");
-            System.out.println("--------------------------------------------------------------------------\n");
+            System.out.println("\n-------------------------------------------------------------------------");
+            System.out.println("- 1:CREA AGENDA MEDIANTE NOME                                              -");
+            System.out.println("- 2.CANCELLA AGENDA                                                        -");
+            System.out.println("- 3.CREA AGENDA MEDIANTE FILE APPUNTAMENTI                                 -");
+            System.out.println("- 4.SCRIVI AGENDA SU FILE                                                  -");
+            System.out.println("- 5.INSERISCI NUOVO APPUNTAMENTO IN AGENDA                                 -");
+            System.out.println("- 6.MODIFICA I DATI DELL'APPUNTAMENTO                                      -");
+            System.out.println("- 7.CERCA APPUNTAMENTO MEDIANTE DATA                                       -");
+            System.out.println("- 8.CERCA APPUNTAMENTO MEDIANTE NOME PERSONA DI CUI SI HA L'APPUNTAMENTO   -");
+            System.out.println("--------------------------------------------------------------------------");
 
             System.out.print("Enter Your Choice : ");
             parolaScelta = s.nextInt();
@@ -48,6 +45,14 @@ public class InterafacciaUtente {
                     System.out.print("Inserisci il nome dell'agenda da cancellare :");
                     String nomePerAgenda = scanner.nextLine();
                     Agenda agenda1 =new Agenda(nomePerAgenda);
+                    agenda.cancellaAgenda(agenda1);
+                    System.out.println(agenda.getNomeAgenda()+" è stata cancellata correttamente");
+                    System.out.println("le agende ancora disponibili sono:\n");
+
+                    for (Agenda iteratore : agenda.getListaAgende()) {
+                        System.out.println(iteratore.getNomeAgenda());
+                    }
+
                     System.out.println("-----------------------------------");
                     break;
                 }
@@ -93,21 +98,21 @@ public class InterafacciaUtente {
                 }
                 case 5:
                     int i = 1;
-                    System.out.print("Su quale agenda vuoi operare :\n");
+                    System.out.print("Su quale agenda vuoi operare :");
                     for (Agenda iteratore : agenda.getListaAgende()) {
                         System.out.println(i + " " + iteratore.getNomeAgenda());
                         i++;
                     }
                     int numeroAgenda;
                     do {
-                        System.out.print("inserisci il numero dell'agenda di cui vuoi operare :\n");
+                        System.out.print("inserisci il numero dell'agenda di cui vuoi operare :");
                         numeroAgenda = scanner.nextInt();
                     } while (numeroAgenda < 1 || numeroAgenda > i-1);
                     Agenda agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
                     System.out.print("Inserisci la data dell'appuntamento :");
                     Scanner scan = new Scanner(System.in);
                     LocalDate dataAppuntamento = LocalDate.of(scan.nextInt(), scan.nextInt(), scan.nextInt());
-                    DateTimeFormatter ld = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    //DateTimeFormatter ld = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     System.out.print("Inserisci l'ora dell'appuntamento :");
                     //String time = scan.next();  //default format: hh:mm:ss
                     //LocalTime oraAppuntamento = LocalTime.parse(time);
@@ -177,12 +182,15 @@ public class InterafacciaUtente {
                         numeroAgenda = scanner.nextInt();
                     } while (numeroAgenda < 1 || numeroAgenda > i);
                     agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
+                    for (Appuntamento iteratore : agenda1.getListaAppuntamentiDiUnAgenda()) {
+                        System.out.println(iteratore.toString());
+                    }
                     System.out.print("Inserisci la data dell'appuntamento :");
                     scan = new Scanner(System.in);
                     LocalDate dataAppuntamento3 = LocalDate.of(scan.nextInt(), scan.nextInt(), scan.nextInt());
-                    DateTimeFormatter ld3 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-                    Appuntamento appuntamento4 = agenda.cercaAppuntamentoPerData(agenda1, LocalDate.parse(dataAppuntamento3.format(ld3)));
+                    //DateTimeFormatter ld3 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    //LocalDate.parse(dataAppuntamento3.format(ld3)))
+                    Appuntamento appuntamento4 = agenda.cercaAppuntamentoPerData(agenda1, dataAppuntamento3);
                     System.out.print(appuntamento4.toString());
 
                 case 8:
@@ -199,6 +207,9 @@ public class InterafacciaUtente {
                     } while (numeroAgenda < 1 || numeroAgenda > i);
 
                     agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
+                    for (Appuntamento iteratore : agenda1.getListaAppuntamentiDiUnAgenda()) {
+                        System.out.println(iteratore.toString());
+                    }
                     System.out.print("Inserisci il nome della persona con cui hai l'appuntamento :");
                     String nomeAppuntamento3 = scanner.nextLine();
                     nomeAppuntamento3 = scanner.nextLine();

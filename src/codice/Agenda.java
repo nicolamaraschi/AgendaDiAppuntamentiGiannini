@@ -37,6 +37,7 @@ public class Agenda implements  Iterable<Agenda>{
     public Iterator<Agenda> iterator() {
         return this.iterator();
     }
+
     // a lei non piace il confronto delle stringhe con == , poi modificalo
     public Appuntamento cercaAppuntamentoPerNome(Agenda agenda, String nomePersona){
         if(nomePersona==null) throw new IllegalArgumentException("errore:nomePersona nulla");
@@ -47,6 +48,7 @@ public class Agenda implements  Iterable<Agenda>{
         if(!agenda.listaAppuntamentiDiUnAgenda.contains(nomePersona)) throw new IllegalArgumentException("errore:non c'è nessuna persona con questo nome che ha fatto una prenotazione");
         return null;
     }
+
     public Appuntamento cercaAppuntamentoPerData(Agenda agenda, LocalDate dataAppuntamento){
         if(dataAppuntamento==null) throw new IllegalArgumentException("errore:nomePersona nulla");
         if(agenda==null) throw new IllegalArgumentException("errore:agenda non esistente");
@@ -98,7 +100,6 @@ public class Agenda implements  Iterable<Agenda>{
             throw new RuntimeException(e);
         }
 
-
         try{
             FileInputStream fstream = new FileInputStream("src/file/agenda.txt");
             DataInputStream in      = new DataInputStream(fstream);
@@ -110,24 +111,18 @@ public class Agenda implements  Iterable<Agenda>{
             while ((strLine = br.readLine()) != null){
                 tokens = strLine.split(" ");
             }
+            int indice=0;
             for(String iteratore: tokens){
-                boolean ceck=true;
-                int indice=0;
-                int indiceIncremento=3;
-                if(ceck){
-                    indice=0;
-                    ceck=true;
-                }
-                else indice=3;
-                dataAppuntamento= LocalDate.parse(tokens[indice+indiceIncremento]);
+                //else indice=3;
+                dataAppuntamento= LocalDate.parse(tokens[indice]);
                 indice++;
-                orarioAppuntamento= LocalTime.parse(tokens[indice+indiceIncremento]);
+                orarioAppuntamento= LocalTime.parse(tokens[indice]);
                 indice++;
-                durataAppuntamento= Integer.parseInt(tokens[indice+indiceIncremento]);
+                durataAppuntamento= Integer.parseInt(tokens[indice]);
                 indice++;
-                nomePersonaAppuntamento=tokens[indice+indiceIncremento];
+                nomePersonaAppuntamento=tokens[indice];
                 indice++;
-                luogoAppuntamento=tokens[indice+indiceIncremento];
+                luogoAppuntamento=tokens[indice];
                 indice++;
                 Appuntamento appuntamento= new Appuntamento(dataAppuntamento,orarioAppuntamento,durataAppuntamento,nomePersonaAppuntamento,luogoAppuntamento);
                 this.listaAppuntamentiDiUnAgenda.add(appuntamento);
@@ -161,6 +156,7 @@ public class Agenda implements  Iterable<Agenda>{
         if(agenda==null) throw new IllegalArgumentException("l'agenda inserita è null");
         if(!this.listaAgende.contains(agenda)) throw new IllegalArgumentException("errore: vuoi cancellare un agenda che non esiste nella lista delle agende");
         this.listaAgende.remove(agenda);
+
     }
 
 

@@ -29,50 +29,15 @@ public class Appuntamento implements Comparable<Appuntamento> {
         return dataGregoriana;
     }
     */
-    public Appuntamento setDataAppuntamento(LocalDate dataAppuntamento) {
-        this.dataAppuntamento = dataAppuntamento;
-        return this;
-    }
-
-    public Appuntamento setOrarioAppuntamento(LocalTime orarioAppuntamento) {
-        this.orarioAppuntamento = orarioAppuntamento;
-        return this;
-    }
-
-    public Appuntamento setDurataAppuntamento(int durataAppuntamento) {
-        this.durataAppuntamento = durataAppuntamento;
-        return this;
-    }
-
-    public Appuntamento setNomePersonaAppuntamento(String nomePersonaAppuntamento) {
-        this.nomePersonaAppuntamento = nomePersonaAppuntamento;
-        return this;
-    }
-
-    public Appuntamento setLuogoAppuntamento(String luogoAppuntamento) {
-        this.luogoAppuntamento = luogoAppuntamento;
-        return this;
-    }
 
     public LocalDate getDataAppuntamento() {
         return dataAppuntamento;
-    }
-
-    public LocalTime getOrarioAppuntamento() {
-        return orarioAppuntamento;
-    }
-
-    public int getDurataAppuntamento() {
-        return durataAppuntamento;
     }
 
     public String getNomePersonaAppuntamento() {
         return nomePersonaAppuntamento;
     }
 
-    public String getLuogoAppuntamento() {
-        return luogoAppuntamento;
-    }
 
 
     @Override
