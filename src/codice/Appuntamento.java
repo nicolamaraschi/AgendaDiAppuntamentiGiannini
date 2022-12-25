@@ -12,10 +12,10 @@ public class Appuntamento implements Comparable<Appuntamento> {
     int durataAppuntamento;
     String nomePersonaAppuntamento;
     String luogoAppuntamento;
-    GregorianCalendar dataGregoriana = GregorianCalendar.from(this.dataAppuntamento.atStartOfDay(ZoneId.systemDefault()));
+    //GregorianCalendar dataGregoriana = GregorianCalendar.from(this.dataAppuntamento.atStartOfDay(ZoneId.systemDefault()));
 
     public Appuntamento(LocalDate dataAppuntamento, LocalTime orarioAppuntamento, int durataAppuntamento, String nomePersonaAppuntamento, String luogoAppuntamento) {
-        this.dataAppuntamento = dataAppuntamento;
+       this.dataAppuntamento=dataAppuntamento;
         this.orarioAppuntamento = orarioAppuntamento;
         this.durataAppuntamento = durataAppuntamento;
         if(durataAppuntamento<0 || durataAppuntamento>=60) throw new IllegalArgumentException();
@@ -23,10 +23,12 @@ public class Appuntamento implements Comparable<Appuntamento> {
         this.luogoAppuntamento = luogoAppuntamento;
     }
 
-    public GregorianCalendar getDataGregoriana() {
+    /*
+     public GregorianCalendar getDataGregoriana() {
+
         return dataGregoriana;
     }
-
+    */
     public Appuntamento setDataAppuntamento(LocalDate dataAppuntamento) {
         this.dataAppuntamento = dataAppuntamento;
         return this;
@@ -75,7 +77,7 @@ public class Appuntamento implements Comparable<Appuntamento> {
 
     @Override
     public String toString() {
-        return dataGregoriana+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento;
+        return dataAppuntamento+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento+"\n";
     }
 
     @Override

@@ -3,6 +3,7 @@ package codice;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 
 // problema: non viene mai usato iterable, devi correggere
@@ -15,19 +16,15 @@ public class Agenda implements  Iterable<Agenda>{
 
     final String nomeAgenda;
 
-    public Agenda(ArrayList<Appuntamento> listaAppuntamentiDiUnAgenda, String nomeAgenda) {
-        this.listaAppuntamentiDiUnAgenda = listaAppuntamentiDiUnAgenda;
-        this.nomeAgenda = nomeAgenda;
-    }
-
-    public ArrayList<Appuntamento> getListaAppuntamentiDiUnAgenda() {
-        return listaAppuntamentiDiUnAgenda;
-    }
 
     public Agenda(String nomeAgenda) {
         this.nomeAgenda = nomeAgenda;
+        this.listaAppuntamentiDiUnAgenda = new ArrayList<>();
+        this.listaAgende= new ArrayList<>();
     }
-
+    public ArrayList<Appuntamento> getListaAppuntamentiDiUnAgenda() {
+        return listaAppuntamentiDiUnAgenda;
+    }
     public String getNomeAgenda() {
         return nomeAgenda;
     }
@@ -73,10 +70,10 @@ public class Agenda implements  Iterable<Agenda>{
     // IllegalArgumentException non le vanno bene bisogma crearne eccezioni a doc oppure utilizzare qualche eccezione molto piu particolare
     public Agenda creaAgendaDalNome(String nome){
         if(nome==null) throw new IllegalArgumentException("nome inserito nullo");
-        if(this.listaAgende.contains(nome)) throw new IllegalArgumentException("errore:il nome da lei inserito è gia contenuto nella lista delle agende");
-        Agenda agenda= new Agenda(nome);
+        if(getListaAgende().contains(nome)) throw new IllegalArgumentException("errore:il nome da lei inserito è gia contenuto nella lista delle agende");
+         Agenda agenda= new Agenda(nome);
         // questa add è da controllare
-        this.listaAgende.add(agenda);
+        getListaAgende().add(agenda);
         return agenda;
     }
 
@@ -162,9 +159,8 @@ public class Agenda implements  Iterable<Agenda>{
 
     public void cancellaAgenda(Agenda agenda){
         if(agenda==null) throw new IllegalArgumentException("l'agenda inserita è null");
-        if(!this.listaAgende.contains(agenda)) throw new IllegalArgumentException("errore: vuoi cancellare un agenda che non esiste nella lista delel agende");
+        if(!this.listaAgende.contains(agenda)) throw new IllegalArgumentException("errore: vuoi cancellare un agenda che non esiste nella lista delle agende");
         this.listaAgende.remove(agenda);
-
     }
 
 

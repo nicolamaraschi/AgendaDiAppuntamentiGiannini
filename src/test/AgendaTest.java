@@ -41,10 +41,10 @@ class AgendaTest {
         testListaAppuntamenti3.add(ap5);
         testListaAppuntamenti3.add(ap6);
 
-         ag1= new Agenda(testListaAppuntamenti1,"nicola");
-         ag2= new Agenda(testListaAppuntamenti1,"giovanni");
-         ag3= new Agenda(testListaAppuntamenti2,"simone");
-         ag4= new Agenda(testListaAppuntamenti3,"lorenzo");
+         //ag1= new Agenda(testListaAppuntamenti1, listaAgende, "nicola");
+         //ag2= new Agenda(testListaAppuntamenti1, listaAgende, "giovanni");
+         //ag3= new Agenda(testListaAppuntamenti2, listaAgende, "simone");
+         //ag4= new Agenda(testListaAppuntamenti3, listaAgende, "lorenzo");
 
 
     }

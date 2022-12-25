@@ -8,13 +8,16 @@ import java.util.Scanner;
 import codice.*;
 public class InterafacciaUtente {
     public static void main(String[] args) {
-        Agenda agenda=new Agenda("nicola");
+        Agenda agenda= new Agenda("nicola");
         Scanner scanner = new Scanner(System.in);
         Scanner s1 = new Scanner(System.in);
         Scanner s = new Scanner(System.in);
         int parolaScelta = 10;
+        while (true){
+
 
         do {
+            System.out.println("\n------------------------------------------------------------------------");
             System.out.println("1:CREA AGENDA MEDIANTE NOME");
             System.out.println("2.CANCELLA AGENDA");
             System.out.println("3.CREA AGENDA MEDIANTE FILE APPUNTAMENTI");
@@ -23,6 +26,8 @@ public class InterafacciaUtente {
             System.out.println("6.MODIFICA I DATI DELL'APPUNTAMENTO");
             System.out.println("7.CERCA APPUNTAMENTO MEDIANTE DATA");
             System.out.println("8.CERCA APPUNTAMENTO MEDIANTE NOME PERSONA DI CUI SI HA L'APPUNTAMENTO");
+            System.out.println("--------------------------------------------------------------------------\n");
+
             System.out.print("Enter Your Choice : ");
             parolaScelta = s.nextInt();
 
@@ -34,29 +39,21 @@ public class InterafacciaUtente {
                     break;
                 }
                 case 2: {
-                    System.out.println("----------------------------");
-                    System.out.print("Inserisci il nome dell'agenda da cancellare : ");
-                    agenda.cancellaAgenda(agenda);
-                    System.out.println("----------------------------");
+                    System.out.println("------------------------------------");
+                    System.out.print("lista delle agende disponibili :\n");
+
+                    for (Agenda iteratore : agenda.getListaAgende()) {
+                        System.out.println(iteratore.getNomeAgenda());
+                    }
+                    System.out.print("Inserisci il nome dell'agenda da cancellare :");
+                    String nomePerAgenda = scanner.nextLine();
+                    Agenda agenda1 =new Agenda(nomePerAgenda);
+                    System.out.println("-----------------------------------");
                     break;
                 }
                 case 3: {
-                    agenda.creaAgendaDaFile(agenda);
-                    System.out.println("----------------------------");
-                    break;
-                }
-                case 4: {
-                    try {
-                        agenda.ScritturaAgendaSulFile(agenda);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.println("----------------------------");
-                    break;
-                }
-                case 5:
                     int i = 1;
-                    System.out.print("Su quale agenda vuoi operare :");
+                    System.out.print("Su quale agenda vuoi operare :\n");
                     for (Agenda iteratore : agenda.getListaAgende()) {
                         System.out.println(i + " " + iteratore.getNomeAgenda());
                         i++;
@@ -65,27 +62,70 @@ public class InterafacciaUtente {
                     do {
                         System.out.print("inserisci il numero dell'agenda di cui vuoi operare :");
                         numeroAgenda = scanner.nextInt();
-                    } while (numeroAgenda < 1 || numeroAgenda > i);
-                    Agenda agenda1 = agenda.getListaAgende().get(numeroAgenda);
+                    } while (numeroAgenda < 1 || numeroAgenda > i-1);
+
+                    Agenda agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
+                    agenda.creaAgendaDaFile(agenda1);
+                    System.out.println("----------------------------");
+                    break;
+                }
+                case 4: {
+                    try {
+                        int i = 1;
+                        System.out.print("Su quale agenda vuoi operare :\n");
+                        for (Agenda iteratore : agenda.getListaAgende()) {
+                            System.out.println(i + " " + iteratore.getNomeAgenda());
+                            i++;
+                        }
+                        int numeroAgenda;
+                        do {
+                            System.out.print("inserisci il numero dell'agenda di cui vuoi operare :");
+                            numeroAgenda = scanner.nextInt();
+                        } while (numeroAgenda < 1 || numeroAgenda > i-1);
+
+                        Agenda agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
+                        agenda.ScritturaAgendaSulFile(agenda1);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("----------------------------");
+                    break;
+                }
+                case 5:
+                    int i = 1;
+                    System.out.print("Su quale agenda vuoi operare :\n");
+                    for (Agenda iteratore : agenda.getListaAgende()) {
+                        System.out.println(i + " " + iteratore.getNomeAgenda());
+                        i++;
+                    }
+                    int numeroAgenda;
+                    do {
+                        System.out.print("inserisci il numero dell'agenda di cui vuoi operare :\n");
+                        numeroAgenda = scanner.nextInt();
+                    } while (numeroAgenda < 1 || numeroAgenda > i-1);
+                    Agenda agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
                     System.out.print("Inserisci la data dell'appuntamento :");
                     Scanner scan = new Scanner(System.in);
                     LocalDate dataAppuntamento = LocalDate.of(scan.nextInt(), scan.nextInt(), scan.nextInt());
                     DateTimeFormatter ld = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     System.out.print("Inserisci l'ora dell'appuntamento :");
-                    String time = scan.next();  //default format: hh:mm:ss
-                    LocalTime oraAppuntamento = LocalTime.parse(time);
+                    //String time = scan.next();  //default format: hh:mm:ss
+                    //LocalTime oraAppuntamento = LocalTime.parse(time);
+                    LocalTime oraAppuntamento= LocalTime.of(scan.nextInt(), scan.nextInt());
                     System.out.print("Inserisci la dutara dell'appuntamento :");
                     int durataAppuntamento = scanner.nextInt();
                     System.out.print("inserisci il nome della persona da incontrare all'appuntamento :");
                     String nomeAppuntamento = scanner.nextLine();
+                   nomeAppuntamento = scanner.nextLine();
                     System.out.print("Inserisci luogo dell'appuntamento :");
                     String luogoAppuntamento = scanner.nextLine();
 
-                    agenda.inserisciAppuntantoAllAgenda(agenda1, LocalDate.parse(dataAppuntamento.format(ld)), oraAppuntamento, durataAppuntamento, nomeAppuntamento, luogoAppuntamento);
+                    //debuggin LocalDate.parse(dataAppuntamento.format(ld))
+                    agenda.inserisciAppuntantoAllAgenda(agenda1, dataAppuntamento, oraAppuntamento, durataAppuntamento, nomeAppuntamento, luogoAppuntamento);
                     break;
                 case 6:
                     i = 1;
-                    System.out.print("Su quale agenda vuoi operare :");
+                    System.out.print("Su quale agenda vuoi operare :\n");
                     for (Agenda iteratore : agenda.getListaAgende()) {
                         System.out.println(i + " " + iteratore.getNomeAgenda());
                         i++;
@@ -94,11 +134,11 @@ public class InterafacciaUtente {
                         System.out.print("inserisci il numero dell'agenda di cui vuoi operare :");
                         numeroAgenda = scanner.nextInt();
                     } while (numeroAgenda < 1 || numeroAgenda > i);
-                    agenda1 = agenda.getListaAgende().get(numeroAgenda);
+                    agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
 
                     i = 1;
                     System.out.print("Su quale appuntamento vuoi operare :");
-                    for (Appuntamento iteratore : agenda.getListaAppuntamentiDiUnAgenda()) {
+                    for (Appuntamento iteratore : agenda1.getListaAppuntamentiDiUnAgenda()) {
                         System.out.println(i + " " + iteratore.toString());
                         i++;
                     }
@@ -106,7 +146,7 @@ public class InterafacciaUtente {
                     do {
                         System.out.print("inserisci il numero dell'appuntamento di cui vuoi operare :");
                         numeroAppello = scanner.nextInt();
-                    } while (numeroAppello < 1 || numeroAppello > i);
+                    } while (numeroAppello < 1 || numeroAppello > i-1);
 
                     System.out.print("reinserici la data dell' appuntamento:");
                     Scanner scan2 = new Scanner(System.in);
@@ -136,7 +176,7 @@ public class InterafacciaUtente {
                         System.out.print("inserisci il numero dell'agenda di cui vuoi operare :");
                         numeroAgenda = scanner.nextInt();
                     } while (numeroAgenda < 1 || numeroAgenda > i);
-                    agenda1 = agenda.getListaAgende().get(numeroAgenda);
+                    agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
                     System.out.print("Inserisci la data dell'appuntamento :");
                     scan = new Scanner(System.in);
                     LocalDate dataAppuntamento3 = LocalDate.of(scan.nextInt(), scan.nextInt(), scan.nextInt());
@@ -153,21 +193,24 @@ public class InterafacciaUtente {
                         i++;
                     }
                     do {
-                        System.out.print("inserisci il numero dell'agenda di cui vuoi operare :");
+                        System.out.print("\ninserisci il numero dell'agenda di cui vuoi operare :");
                         numeroAgenda = scanner.nextInt();
+
                     } while (numeroAgenda < 1 || numeroAgenda > i);
 
-                    agenda1 = agenda.getListaAgende().get(numeroAgenda);
+                    agenda1 = agenda.getListaAgende().get(numeroAgenda-1);
                     System.out.print("Inserisci il nome della persona con cui hai l'appuntamento :");
                     String nomeAppuntamento3 = scanner.nextLine();
+                    nomeAppuntamento3 = scanner.nextLine();
                     Appuntamento appuntamento5 = agenda.cercaAppuntamentoPerNome(agenda1, nomeAppuntamento3);
+                    System.out.println("gli appuntamenti trovati a questo nome sono:\n");
                     System.out.print(appuntamento5.toString());
                     break;
 
             }
         }
-        while (parolaScelta > 0);
-
+        while (parolaScelta < 1||parolaScelta>8);
+        }
     }
 
 }
