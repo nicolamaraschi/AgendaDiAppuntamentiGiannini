@@ -1,24 +1,45 @@
 package codice;
 
+import eccezioni.InputErratiException;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.GregorianCalendar;
 
 
+/**
+ *
+ */
 public class Appuntamento implements Comparable<Appuntamento> {
     LocalDate dataAppuntamento;
+
+    DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d/MM/uuuu");
+    String text = dataAppuntamento.format(formatters);
+    LocalDate parsedDate = LocalDate.parse(text, formatters);
+
+
     LocalTime orarioAppuntamento;
     int durataAppuntamento;
     String nomePersonaAppuntamento;
     String luogoAppuntamento;
     //GregorianCalendar dataGregoriana = GregorianCalendar.from(this.dataAppuntamento.atStartOfDay(ZoneId.systemDefault()));
 
+    /**
+     * Costruttore principale per la classe appuntamento
+     * @param dataAppuntamento la data di quando avviene l'appuntamento
+     * @param orarioAppuntamento  l'orario di quando si effettua l'appuntamento
+     * @param durataAppuntamento   la durata in minuti dell'appuntamento
+     * @param nomePersonaAppuntamento il nome della persona da incontrare all'appuntamento
+     * @param luogoAppuntamento il luogo dove si ha l'appuntamento
+     */
     public Appuntamento(LocalDate dataAppuntamento, LocalTime orarioAppuntamento, int durataAppuntamento, String nomePersonaAppuntamento, String luogoAppuntamento) {
        this.dataAppuntamento=dataAppuntamento;
         this.orarioAppuntamento = orarioAppuntamento;
         this.durataAppuntamento = durataAppuntamento;
-        if(durataAppuntamento<0 || durataAppuntamento>=60) throw new IllegalArgumentException();
+
+
         this.nomePersonaAppuntamento = nomePersonaAppuntamento;
         this.luogoAppuntamento = luogoAppuntamento;
     }
@@ -30,21 +51,33 @@ public class Appuntamento implements Comparable<Appuntamento> {
     }
     */
 
+    /**
+     * @return dataAppuntamento
+     */
     public LocalDate getDataAppuntamento() {
         return dataAppuntamento;
     }
 
+    /**
+     * @return nomePersonaAppuntamento
+     */
     public String getNomePersonaAppuntamento() {
         return nomePersonaAppuntamento;
     }
 
-
-
+    /**
+     * @return dataAppuntamento+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento+"\n"
+     */
     @Override
     public String toString() {
         return dataAppuntamento+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento+"\n";
     }
 
+    /**
+     * questo metodo ci permette di determinare due agende uguali controllando la data dell'appuntamento, l'orario dell'appuntamento e il luogo dove avviene l'appuntamento
+     * @param o
+     * @return boolean
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,7 +86,10 @@ public class Appuntamento implements Comparable<Appuntamento> {
         return dataAppuntamento.equals(that.dataAppuntamento) && orarioAppuntamento.equals(that.orarioAppuntamento) && luogoAppuntamento.equals(that.luogoAppuntamento);
     }
 
-
+    /**
+     * @param appuntamento the object to be compared.
+     * @return int
+     */
     @Override
     public int compareTo(Appuntamento appuntamento) {
         return this.dataAppuntamento.compareTo(appuntamento.dataAppuntamento);
