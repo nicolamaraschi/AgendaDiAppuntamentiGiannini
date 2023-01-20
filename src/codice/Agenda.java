@@ -106,15 +106,16 @@ public class Agenda implements  Iterable<Agenda>{
 
     /**
      * @param agenda
-     * @param appuntamento
+     * @param appuntamentoModificato
      * @throws InputErratiException
      * @throws AppuntamentoInesistenteException
      */
-    // domanda da farle: ma devo far poter modificare ogni combinazione di campo di appuntamento
-   public  void modificaAppuntamento(Agenda agenda, Appuntamento appuntamento) throws InputErratiException, AppuntamentoInesistenteException {
-        if(appuntamento==null|| agenda==null) throw new InputErratiException("errore:dati inseriri non corretti");
-        if(!this.listaAppuntamentiDiUnAgenda.contains(appuntamento)) throw new AppuntamentoInesistenteException("errore:appuntamento non trovato");
-        agenda.getListaAppuntamentiDiUnAgenda().add(appuntamento);
+    //todo domanda da farle: ma devo far poter modificare ogni combinazione di campo di appuntamento
+   public  void modificaAppuntamento(Agenda agenda, Appuntamento appuntamentoModificato, Appuntamento appuntamentoVecchio) throws InputErratiException, AppuntamentoInesistenteException {
+        if(appuntamentoModificato==null|| agenda==null) throw new InputErratiException("errore:dati inseriri non corretti");
+        if(!this.listaAppuntamentiDiUnAgenda.contains(appuntamentoVecchio)) throw new AppuntamentoInesistenteException("\nerrore:appuntamento non trovato\n");
+        agenda.getListaAppuntamentiDiUnAgenda().remove(appuntamentoVecchio);
+        agenda.getListaAppuntamentiDiUnAgenda().add(appuntamentoModificato);
    }
 
 
@@ -125,7 +126,7 @@ public class Agenda implements  Iterable<Agenda>{
      * @throws InputErratiException
      * @throws AgendaInesistenteException
      */
-    // IllegalArgumentException non le vanno bene bisogna crearne eccezioni a doc oppure utilizzare qualche eccezione molto piu particolare
+
     public Agenda creaAgendaDalNome(String nome) throws InputErratiException, AgendaInesistenteException {
         if(nome==null) throw new InputErratiException("errore:dati inseriri non corretti");
         Agenda agenda= new Agenda(nome);
@@ -229,6 +230,7 @@ public class Agenda implements  Iterable<Agenda>{
      * @throws AppuntamentoInesistenteException
      */
     public void inserisciAppuntamentoAllAgenda(Agenda agenda,Appuntamento appuntamento) throws InputErratiException, AppuntamentoInesistenteException, SovrapposizioneAppuntamentiException {
+
         boolean ceck=false;
         if(agenda==null|| appuntamento ==null) throw new InputErratiException("errore:dati inseriri non corretti");
         if(agenda.listaAppuntamentiDiUnAgenda.contains(appuntamento)) throw new AppuntamentoInesistenteException("errore: appuntamento già presente il agenda");
@@ -237,20 +239,22 @@ public class Agenda implements  Iterable<Agenda>{
             return;
         }
         for (Appuntamento iteratore: agenda.getListaAppuntamentiDiUnAgenda()){
+            int minutiIteratore=iteratore.orarioAppuntamento.getMinute();
+            int minutiTotaliIteratore=minutiIteratore+iteratore.durataAppuntamento;
+            int minutiInput=appuntamento.orarioAppuntamento.getMinute();
+            int minutiTotaliInput=minutiInput+appuntamento.durataAppuntamento;
+
+            int oreIteratore=iteratore.orarioAppuntamento.getHour();
+            int oreTotaliIteratore=iteratore.durataAppuntamento+minutiIteratore;
+            int oreInput=appuntamento.orarioAppuntamento.getHour();
+            int oreTotaliInput=appuntamento.durataAppuntamento+minutiInput;
             if((iteratore.dataAppuntamento.compareTo(appuntamento.dataAppuntamento))==0){
-                if(iteratore.orarioAppuntamento.getHour()==appuntamento.orarioAppuntamento.getHour()){
-                    int minutiIteratore=iteratore.orarioAppuntamento.getMinute();
-                    int minutiTotaliIteratore=minutiIteratore+iteratore.durataAppuntamento;
-                    int minutiInput=appuntamento.orarioAppuntamento.getMinute();
-                    int minutiTotaliInput=minutiInput+appuntamento.durataAppuntamento;
-                    if(appuntamento.orarioAppuntamento.getMinute()<iteratore.orarioAppuntamento.getMinute() &&((appuntamento.orarioAppuntamento.getMinute()+appuntamento.durataAppuntamento)<iteratore.orarioAppuntamento.getMinute()) ||(appuntamento.orarioAppuntamento.getMinute()>(iteratore.orarioAppuntamento.getMinute()+iteratore.durataAppuntamento)) &&((appuntamento.orarioAppuntamento.getMinute()+appuntamento.durataAppuntamento)>(iteratore.orarioAppuntamento.getMinute()+iteratore.durataAppuntamento))){
+                if(oreIteratore==oreInput){
+                    if(minutiInput<minutiIteratore &&((minutiTotaliInput)<minutiIteratore) ||(minutiInput>minutiTotaliIteratore) &&((minutiTotaliInput)>minutiTotaliIteratore)){
                     }
                     else throw new SovrapposizioneAppuntamentiException("");
-
                 }
-
-                if((appuntamento.orarioAppuntamento.getHour()<iteratore.orarioAppuntamento.getHour())&& (appuntamento.orarioAppuntamento.getHour()+((appuntamento.durataAppuntamento+appuntamento.orarioAppuntamento.getMinute())/60))<iteratore.orarioAppuntamento.getHour()
-                        || (appuntamento.orarioAppuntamento.getHour()>(iteratore.orarioAppuntamento.getHour()+((iteratore.durataAppuntamento+iteratore.orarioAppuntamento.getMinute())/60)))&& (appuntamento.orarioAppuntamento.getHour()+(appuntamento.orarioAppuntamento.getMinute()+((appuntamento.durataAppuntamento+appuntamento.orarioAppuntamento.getMinute())/60)))>(iteratore.orarioAppuntamento.getHour()+((iteratore.durataAppuntamento+iteratore.orarioAppuntamento.getMinute())/60))){}
+                if((oreInput<oreIteratore)&& (oreInput+(oreTotaliInput/60))<oreIteratore || (oreInput>(oreIteratore+(oreTotaliIteratore/60)))&& (oreInput+(minutiInput+(oreTotaliInput/60)))>(oreIteratore+(oreTotaliIteratore/60))){}
                 else throw new SovrapposizioneAppuntamentiException("TEST");
             }
 

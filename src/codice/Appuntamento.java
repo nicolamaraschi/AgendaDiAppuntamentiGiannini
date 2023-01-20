@@ -15,9 +15,9 @@ import java.util.GregorianCalendar;
 public class Appuntamento implements Comparable<Appuntamento> {
     LocalDate dataAppuntamento;
 
-    DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d/MM/uuuu");
-    String text = dataAppuntamento.format(formatters);
-    LocalDate parsedDate = LocalDate.parse(text, formatters);
+    //DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d/MM/uuuu");
+    //String text = dataAppuntamento.format(formatters);
+    //LocalDate parsedDate = LocalDate.parse(text, formatters);
 
 
     LocalTime orarioAppuntamento;

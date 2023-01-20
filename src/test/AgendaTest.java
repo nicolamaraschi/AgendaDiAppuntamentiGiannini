@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 //TODO fare tutti i test
 class AgendaTest {
     Appuntamento ap1,ap2,ap3,ap4,ap5,ap6,ap7;
@@ -48,11 +50,20 @@ class AgendaTest {
         ag1.inserisciAppuntamentoAllAgenda(ag1,ap1);
         Appuntamento app1 = ag1.cercaAppuntamentoPerData(ag1,LocalDate.of(2020,3,20));
         Assert.assertEquals(app1.getDataAppuntamento(),LocalDate.of(2020,3,20));
+        Throwable e = assertThrows(AppuntamentoInesistenteException.class, () -> ag1.cercaAppuntamentoPerData(ag1,LocalDate.of(2025,3,20)));
+        assertEquals(e.getMessage(), "\nerrore:non c'è nessuna prenotazione per quella data\n");
+
     }
 
     @org.junit.jupiter.api.Test
-    void modificaAppuntamento() {
-
+    void modificaAppuntamento() throws AgendaInesistenteException, InputErratiException, AppuntamentoInesistenteException, SovrapposizioneAppuntamentiException {
+            ag1.creaAgendaDalNome("terenzio");
+            ag1.inserisciAppuntamentoAllAgenda(ag1,ap1);
+            assertEquals(ag1.getListaAppuntamentiDiUnAgenda().get(0).getDataAppuntamento(),LocalDate.of(2020,3,20));
+            Throwable e = assertThrows(AppuntamentoInesistenteException.class, () -> ag1.modificaAppuntamento(ag1,ap1,ap2));
+            assertEquals(e.getMessage(), "\nerrore:appuntamento non trovato\n");
+            ag1.modificaAppuntamento(ag1,ap2,ap1);
+            assertEquals(ag1.getListaAppuntamentiDiUnAgenda().get(0).getDataAppuntamento(),LocalDate.of(2019,6,2));
     }
 
     @org.junit.jupiter.api.Test
@@ -71,7 +82,9 @@ class AgendaTest {
     @org.junit.jupiter.api.Test
     void creaAgendaDaFile() {
         ag1.creaAgendaDaFile(ag2);
-        Assert.assertEquals(ag2.getListaAgende().size(),0);
+        Assert.assertEquals(ag1.getListaAgende().size(),0);
+        ag1.creaAgendaDaFile(ag3);
+
     }
 
     @org.junit.jupiter.api.Test

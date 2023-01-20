@@ -215,13 +215,14 @@ public class InterfacciaUtente {
                                     System.out.println(i + " " + iteratore.toString());
                                     i++;
                                 }
-                                int numeroAppello;
+                                int numeroAppuntamento;
                                 do {
                                     System.out.print("inserisci il numero dell'appuntamento di cui vuoi operare :");
-                                    numeroAppello = scanner.nextInt();
-                                } while (numeroAppello < 1 || numeroAppello > i - 1);
+                                    numeroAppuntamento = scanner.nextInt();
+                                } while (numeroAppuntamento < 1 || numeroAppuntamento > i - 1);
 
                                 try {
+
                                     System.out.print("reinserisci la data dell' appuntamento:");
                                     Scanner scan2 = new Scanner(System.in);
                                     LocalDate dataAppuntamento2 = LocalDate.of(scan2.nextInt(), scan2.nextInt(), scan2.nextInt());
@@ -236,7 +237,7 @@ public class InterfacciaUtente {
                                     System.out.print("reinserisci il luogo dell' appuntamento:");
                                     String luogoAppuntamento2 = scanner.nextLine();
                                     Appuntamento appuntamento = new Appuntamento(LocalDate.parse(dataAppuntamento2.format(ld2)), oraAppuntamento2, durataAppuntamento2, nomeAppuntamento2, luogoAppuntamento2);
-                                    agenda.modificaAppuntamento(agenda1, appuntamento);
+                                    agenda.modificaAppuntamento(agenda1, appuntamento,agenda1.getListaAppuntamentiDiUnAgenda().get(numeroAppuntamento));
                                     // qua vado ad togliere l'appuntamento che sono andato a modificare, faccio i-1 perché i parte da 1 e ArrayList da 0
                                     agenda.getListaAppuntamentiDiUnAgenda().remove(i - 1);
                                 } catch (DateTimeParseException e) {
