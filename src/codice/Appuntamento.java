@@ -14,12 +14,6 @@ import java.util.GregorianCalendar;
  */
 public class Appuntamento implements Comparable<Appuntamento> {
     LocalDate dataAppuntamento;
-
-    //DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d/MM/uuuu");
-    //String text = dataAppuntamento.format(formatters);
-    //LocalDate parsedDate = LocalDate.parse(text, formatters);
-
-
     LocalTime orarioAppuntamento;
     int durataAppuntamento;
     String nomePersonaAppuntamento;
@@ -44,12 +38,17 @@ public class Appuntamento implements Comparable<Appuntamento> {
         this.luogoAppuntamento = luogoAppuntamento;
     }
 
-    /*
-     public GregorianCalendar getDataGregoriana() {
-
-        return dataGregoriana;
+    public LocalTime getOrarioAppuntamento() {
+        return orarioAppuntamento;
     }
-    */
+
+    public int getDurataAppuntamento() {
+        return durataAppuntamento;
+    }
+
+    public String getLuogoAppuntamento() {
+        return luogoAppuntamento;
+    }
 
     /**
      * @return dataAppuntamento
@@ -70,7 +69,7 @@ public class Appuntamento implements Comparable<Appuntamento> {
      */
     @Override
     public String toString() {
-        return dataAppuntamento+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento+"\n";
+        return dataAppuntamento+" "+orarioAppuntamento+" "+durataAppuntamento+" "+nomePersonaAppuntamento+" "+luogoAppuntamento;
     }
 
     /**

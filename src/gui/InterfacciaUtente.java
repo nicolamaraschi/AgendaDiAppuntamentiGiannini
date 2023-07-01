@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import codice.*;
-import eccezioni.AgendaInesistenteException;
-import eccezioni.AppuntamentoInesistenteException;
-import eccezioni.InputErratiException;
-import eccezioni.SovrapposizioneAppuntamentiException;
+import eccezioni.*;
 
 /**
  *
@@ -22,7 +19,7 @@ public class InterfacciaUtente {
         Agenda agenda= new Agenda("");
         Scanner scanner = new Scanner(System.in);
         Scanner s = new Scanner(System.in);
-        int parolaScelta = 0;
+        int parolaScelta ;
         while (true) {
             do {
                 System.out.println("\n-------------------------------------------------------------------------");
@@ -38,10 +35,8 @@ public class InterfacciaUtente {
                 System.out.println("--------------------------------------------------------------------------");
 
                 try {
-                    System.out.print("Enter Your Choice : ");
+                    System.out.print("Inseriti il numero della tua scelta: ");
                     parolaScelta = s.nextInt();
-
-
                     switch (parolaScelta) {
                         case 1: {
                             try {
@@ -87,7 +82,7 @@ public class InterfacciaUtente {
                                 break;
                             } catch (InputMismatchException e) {
                                 System.out.println("errore:inserisci i dati in maniera corretta");
-                            } catch (InputErratiException e) {
+                            } catch (InputErratiException | AgendaInesistenteException e) {
                                 System.out.println("\ninserisci i dati corretti\n");
                             }
                         }
@@ -112,8 +107,6 @@ public class InterfacciaUtente {
                                     System.out.print(iteratore.toString());
                                 }
 
-
-                                //agenda.getListaAgende().add(agendaRiempitaAppuntamentiFile);
                                 System.out.println("\n--------------------------------------------------------------------------");
                                 break;
                             } catch (InputMismatchException e) {
@@ -164,26 +157,21 @@ public class InterfacciaUtente {
                                 System.out.print("Inserisci la data dell'appuntamento :");
                                 Scanner scan = new Scanner(System.in);
                                 LocalDate dataAppuntamento = LocalDate.of(scan.nextInt(), scan.nextInt(), scan.nextInt());
-                                //DateTimeFormatter ld = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                                 System.out.print("Inserisci l'ora dell'appuntamento :");
-                                //String time = scan.next();  default format: hh:mm:ss
-                                //LocalTime oraAppuntamento = LocalTime.parse(time);
                                 LocalTime oraAppuntamento = LocalTime.of(scan.nextInt(), scan.nextInt());
                                 System.out.print("Inserisci la durata dell'appuntamento :");
                                 int durataAppuntamento = scanner.nextInt();
                                 System.out.print("inserisci il nome della persona da incontrare all'appuntamento :");
                                 String nomeAppuntamento = scanner.nextLine();
-                                nomeAppuntamento = scanner.nextLine();
                                 System.out.print("Inserisci luogo dell'appuntamento :");
                                 String luogoAppuntamento = scanner.nextLine();
 
-                                //debuggin LocalDate.parse(dataAppuntamento.format(ld))
                                 Appuntamento appuntamento = new Appuntamento(dataAppuntamento, oraAppuntamento, durataAppuntamento, nomeAppuntamento, luogoAppuntamento);
                                 agenda.inserisciAppuntamentoAllAgenda(agenda1, appuntamento);
                                 break;
                             } catch (InputMismatchException e) {
                                 System.out.println("\nerrore:inserisci i dati in maniera corretta\n");
-                            } catch (AppuntamentoInesistenteException e) {
+                            } catch (AppuntamentoGiaPresente e) {
                                 System.out.println("\nInserisci un appuntamento esistente\n");
                             } catch (InputErratiException e) {
                                 System.out.println("\ninserisci i dati corretti\n");
@@ -222,13 +210,12 @@ public class InterfacciaUtente {
                                 } while (numeroAppuntamento < 1 || numeroAppuntamento > i - 1);
 
                                 try {
-
                                     System.out.print("reinserisci la data dell' appuntamento:");
                                     Scanner scan2 = new Scanner(System.in);
                                     LocalDate dataAppuntamento2 = LocalDate.of(scan2.nextInt(), scan2.nextInt(), scan2.nextInt());
                                     DateTimeFormatter ld2 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                                     System.out.print("reinserisci l'orario dell' appuntamento:");
-                                    String time2 = scan2.next();  //default format: hh:mm:ss
+                                    String time2 = scan2.next();
                                     LocalTime oraAppuntamento2 = LocalTime.parse(time2);
                                     System.out.print("reinserisci la durata dell' appuntamento:");
                                     int durataAppuntamento2 = scanner.nextInt();
@@ -242,6 +229,8 @@ public class InterfacciaUtente {
                                     agenda.getListaAppuntamentiDiUnAgenda().remove(i - 1);
                                 } catch (DateTimeParseException e) {
                                     System.out.println("errore:inserisci i dati in maniera corretta");
+                                } catch (AppuntamentoGiaPresente e) {
+                                    System.out.println("errore:hai modificato un appuntamento con uno uguale che già possiedi");
                                 }
                             } catch (InputMismatchException e) {
                                 System.out.println("errore:inserisci i dati in maniera corretta");
@@ -277,8 +266,6 @@ public class InterfacciaUtente {
                                 System.out.print("Inserisci la data dell'appuntamento :");
                                 scan = new Scanner(System.in);
                                 LocalDate dataAppuntamento = LocalDate.of(scan.nextInt(), scan.nextInt(), scan.nextInt());
-                                //DateTimeFormatter ld3 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                                //LocalDate.parse(dataAppuntamento3.format(ld3)))
                                 Appuntamento appuntamento = agenda.cercaAppuntamentoPerData(agenda1, dataAppuntamento);
                                 System.out.print(appuntamento.toString());
                             } catch (InputMismatchException e) {
@@ -338,8 +325,7 @@ public class InterfacciaUtente {
                                 Agenda agenda1 = agenda.getListaAgende().get(numeroAgenda - 1);
                                 if (agenda1.getListaAppuntamentiDiUnAgenda().size() == 0)
                                     throw new AppuntamentoInesistenteException("");
-                                ArrayList<Appuntamento> appuntamentiOrdinati = new ArrayList<>();
-                                appuntamentiOrdinati = agenda1.elencoAppuntamentiOrdinatiPerData(agenda1);
+                                ArrayList<Appuntamento> appuntamentiOrdinati = agenda1.elencoAppuntamentiOrdinatiPerData(agenda1);
                                 System.out.println("\n");
                                 for (Appuntamento iteratore : appuntamentiOrdinati) {
                                     System.out.println(iteratore.toString());

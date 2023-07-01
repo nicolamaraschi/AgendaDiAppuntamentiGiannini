@@ -2,26 +2,17 @@ package codice;
 
 import eccezioni.InputErratiException;
 import eccezioni.*;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-//import java.time.ZoneId;
 import java.util.*;
 
 
-// problema: non viene mai usato iterable, devi correggere
 
 /**
  *
  */
-// non c'è alcuna gerarchia e non esistono classi abstract e la scrittura su file non deve essere binaria ma semplice
-public class Agenda implements  Iterable<Agenda>{
-
-    /*TODO a Inserire un nuovo appuntamento nell’agenda. In tal caso è necessario verificare correttezza
-       e completezza dei dati inseriti e che non ci siano sovrapposizioni con altri appuntamenti
-        già definiti per quello stesso orario, tenendo ancheconto della durata.*/
-
+public class Agenda {
 
     private ArrayList<Appuntamento> listaAppuntamentiDiUnAgenda;
     private ArrayList<Agenda>       listaAgende;
@@ -33,6 +24,7 @@ public class Agenda implements  Iterable<Agenda>{
      * @param nomeAgenda
      */
     public Agenda(String nomeAgenda) {
+
         this.nomeAgenda = nomeAgenda;
         this.listaAppuntamentiDiUnAgenda = new ArrayList<>();
         this.listaAgende= new ArrayList<>();
@@ -62,16 +54,7 @@ public class Agenda implements  Iterable<Agenda>{
         return listaAgende;
     }
 
-    /**
-     * oggetto iterator per agenda
-     * @return Iterator Agenda
-     */
-    @Override
-    public Iterator<Agenda> iterator() {
-        return this.iterator();
-    }
 
-    // a lei non piace il confronto delle stringhe con == , poi modificalo
 
     /**
      * il metodo cerca un appuntamento di un agenda mediante il nome della persona da incontrare
@@ -95,8 +78,8 @@ public class Agenda implements  Iterable<Agenda>{
      * @throws AppuntamentoInesistenteException
      */
     public Appuntamento cercaAppuntamentoPerData(Agenda agenda, LocalDate dataAppuntamento) throws AppuntamentoInesistenteException {
-        if(dataAppuntamento==null) throw new IllegalArgumentException("errore:nomePersona nulla");
-        if(agenda==null) throw new IllegalArgumentException("errore:agenda non esistente");
+        if(dataAppuntamento==null) throw new IllegalArgumentException("\nerrore:nomePersona nulla\n");
+        if(agenda==null) throw new IllegalArgumentException("\nerrore:agenda non esistente\n");
         for (Appuntamento iteratore: agenda.listaAppuntamentiDiUnAgenda) {
             if(iteratore.getDataAppuntamento().isEqual(dataAppuntamento)) return iteratore;
         }
@@ -110,17 +93,20 @@ public class Agenda implements  Iterable<Agenda>{
      * @throws InputErratiException
      * @throws AppuntamentoInesistenteException
      */
-    //todo domanda da farle: ma devo far poter modificare ogni combinazione di campo di appuntamento
-   public  void modificaAppuntamento(Agenda agenda, Appuntamento appuntamentoModificato, Appuntamento appuntamentoVecchio) throws InputErratiException, AppuntamentoInesistenteException {
-        if(appuntamentoModificato==null|| agenda==null) throw new InputErratiException("errore:dati inseriri non corretti");
+
+   public  void modificaAppuntamento(Agenda agenda, Appuntamento appuntamentoModificato, Appuntamento appuntamentoVecchio) throws InputErratiException, AppuntamentoInesistenteException, AppuntamentoGiaPresente {
+
+        if(appuntamentoModificato==null|| appuntamentoVecchio==null || agenda==null) throw new InputErratiException("\nerrore:dati inseriti non corretti\n");
+
         if(!this.listaAppuntamentiDiUnAgenda.contains(appuntamentoVecchio)) throw new AppuntamentoInesistenteException("\nerrore:appuntamento non trovato\n");
         agenda.getListaAppuntamentiDiUnAgenda().remove(appuntamentoVecchio);
-        agenda.getListaAppuntamentiDiUnAgenda().add(appuntamentoModificato);
+
+       if(agenda.listaAppuntamentiDiUnAgenda.contains(appuntamentoModificato)) throw new AppuntamentoGiaPresente("\nerrore:appuntamento già presente\n");
+
+       agenda.getListaAppuntamentiDiUnAgenda().add(appuntamentoModificato);
    }
-
-
     /**
-     * questo metodo crea un agendaa mediante una stringa nome
+     * questo metodo crea un agenda mediante una stringa nome
      * @param nome
      * @return Agenda
      * @throws InputErratiException
@@ -128,14 +114,11 @@ public class Agenda implements  Iterable<Agenda>{
      */
 
     public Agenda creaAgendaDalNome(String nome) throws InputErratiException, AgendaInesistenteException {
-        if(nome==null) throw new InputErratiException("errore:dati inseriri non corretti");
+        if(nome==null) throw new InputErratiException("\nerrore:dati inseriti non corretti\n");
         Agenda agenda= new Agenda(nome);
         for(Agenda iteratore: getListaAgende()){
-            if(iteratore.getNomeAgenda().equals(nome)) throw new AgendaInesistenteException("errore:il nome da lei inserito è gia contenuto nella lista delle agende");
+            if(iteratore.getNomeAgenda().equals(nome)) throw new AgendaInesistenteException("\nerrore:il nome da lei inserito è gia contenuto nella lista delle agende\n");
         }
-        //if(getListaAgende().contains(nome))
-
-        // questa add è da controllare
         getListaAgende().add(agenda);
         return agenda;
     }
@@ -158,8 +141,7 @@ public class Agenda implements  Iterable<Agenda>{
             BufferedReader br               = new BufferedReader(new InputStreamReader(in));
             // stringa che contiene tutto il testo letto
             String strLine;
-            String[] tokens=null;
-            //Arrays.fill(tokens, null);
+            String[] tokens;
             while ((strLine = br.readLine()) != null){
                 tokens = strLine.split(" ");
                 int i=5;
@@ -187,7 +169,6 @@ public class Agenda implements  Iterable<Agenda>{
         }
         catch (Exception e){
             System.err.println("Error: " + e.getMessage());
-            System.err.println("TEST");
         }
     }
 
@@ -197,17 +178,43 @@ public class Agenda implements  Iterable<Agenda>{
      * @throws IOException
      */
     public void ScritturaAgendaSulFile(Agenda agenda) throws IOException {
-        try{
-            // bisogna vedere se devo gestire nel caso abbia gia un agenda.txt
-            FileWriter writer = new FileWriter("src/file/agenda.txt");
-            for (Appuntamento iteratore:agenda.listaAppuntamentiDiUnAgenda) {
-                writer.write(iteratore.toString());
+
+        File file = new File("src/file/agenda.txt");
+        // Verificare se il file esiste
+        if (file.exists()) {
+            try {
+                // Aprire il file in modalità di append
+                FileWriter fw = new FileWriter(file, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                // Scrivere l'oggetto sul file
+                for (Appuntamento iteratore:agenda.listaAppuntamentiDiUnAgenda){
+                    bw.write(iteratore.toString());
+                    bw.newLine();
+                }
+                bw.close();
+                System.out.println("\nScrittura avvenuta con successo\n");
+            } catch (IOException e) {
+                System.out.println("\nErrore: scrittura sul file fallita\n");
             }
-            writer.close();
-        }
-        // ma questa cosa, si può fare?
-        catch (IOException e){
-            throw new IOException("errore: apertura del file è fallita");
+        } else {
+            System.out.println("\nerrore: Il file non esiste, verrà creato\n");
+            try {
+                // Creare il file
+                file.createNewFile();
+                System.out.println("\nFile creato con successo\n");
+                // Aprire il file in modalità di append
+                FileWriter fw = new FileWriter(file, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                // Scrivere l'oggetto sul file
+                for (Appuntamento iteratore:agenda.listaAppuntamentiDiUnAgenda){
+                    bw.write(iteratore.toString());
+                    bw.newLine();
+                }
+                bw.close();
+                System.out.println("\nOggetto scritto sul file con successo\n");
+            } catch (IOException e) {
+                System.out.println("\nErrore: creazione del file fallita\n");
+            }
         }
     }
 
@@ -216,9 +223,9 @@ public class Agenda implements  Iterable<Agenda>{
      * @param agenda
      * @throws InputErratiException
      */
-    public void cancellaAgenda(Agenda agenda) throws InputErratiException {
-        if(agenda==null) throw new InputErratiException("errore:dati inseriri non corretti");
-        //if(!this.listaAgende.contains(agenda)) throw new AgendaInesistenteException("errore: vuoi cancellare un agenda che non esiste nella lista delle agende");
+    public void cancellaAgenda(Agenda agenda) throws InputErratiException, AgendaInesistenteException {
+        if(agenda==null) throw new InputErratiException("errore:dati inseriti non corretti");
+        if(!this.listaAgende.contains(agenda)) throw new AgendaInesistenteException("errore: vuoi cancellare un agenda che non esiste nella lista delle agende");
         this.listaAgende.remove(agenda);
     }
 
@@ -227,13 +234,11 @@ public class Agenda implements  Iterable<Agenda>{
      * @param agenda
      * @param appuntamento
      * @throws InputErratiException
-     * @throws AppuntamentoInesistenteException
+     * @throws AppuntamentoGiaPresente
      */
-    public void inserisciAppuntamentoAllAgenda(Agenda agenda,Appuntamento appuntamento) throws InputErratiException, AppuntamentoInesistenteException, SovrapposizioneAppuntamentiException {
-
-        boolean ceck=false;
-        if(agenda==null|| appuntamento ==null) throw new InputErratiException("errore:dati inseriri non corretti");
-        if(agenda.listaAppuntamentiDiUnAgenda.contains(appuntamento)) throw new AppuntamentoInesistenteException("errore: appuntamento già presente il agenda");
+    public void inserisciAppuntamentoAllAgenda(Agenda agenda,Appuntamento appuntamento) throws InputErratiException,  SovrapposizioneAppuntamentiException, AppuntamentoGiaPresente {
+        if(agenda==null|| appuntamento ==null) throw new InputErratiException("\nerrore:dati inseriti non corretti\n");
+        if(agenda.listaAppuntamentiDiUnAgenda.contains(appuntamento)) throw new AppuntamentoGiaPresente("\nerrore: appuntamento già presente il agenda\n");
         if(agenda.listaAppuntamentiDiUnAgenda.size()==0){
             agenda.listaAppuntamentiDiUnAgenda.add(appuntamento);
             return;
@@ -252,26 +257,23 @@ public class Agenda implements  Iterable<Agenda>{
                 if(oreIteratore==oreInput){
                     if(minutiInput<minutiIteratore &&((minutiTotaliInput)<minutiIteratore) ||(minutiInput>minutiTotaliIteratore) &&((minutiTotaliInput)>minutiTotaliIteratore)){
                     }
-                    else throw new SovrapposizioneAppuntamentiException("");
+                    else throw new SovrapposizioneAppuntamentiException("\nerrore: appuntamenti in sovrapposizione\n");
                 }
                 if((oreInput<oreIteratore)&& (oreInput+(oreTotaliInput/60))<oreIteratore || (oreInput>(oreIteratore+(oreTotaliIteratore/60)))&& (oreInput+(minutiInput+(oreTotaliInput/60)))>(oreIteratore+(oreTotaliIteratore/60))){}
-                else throw new SovrapposizioneAppuntamentiException("TEST");
+                else throw new SovrapposizioneAppuntamentiException("\nerrore: appuntamenti in sovrapposizione\n");
             }
-
         }
         agenda.listaAppuntamentiDiUnAgenda.add(appuntamento);
     }
-
     /**
      * questo metodo stampa gli appuntamenti in ordine cronologico in base alla data
      * @param agenda
      * @return ArrayList Appuntamento
      * @throws InputErratiException
      */
-    public ArrayList<Appuntamento> elencoAppuntamentiOrdinatiPerData(Agenda agenda) throws InputErratiException {
-        if(agenda==null) throw new InputErratiException("errore:dati inseriri non corretti");
-        //if(agenda.listaAgende.contains(agenda)) throw new AgendaInesistenteException("errore: agenda non esistente");
-       // if(!agenda.listaAppuntamentiDiUnAgenda.contains(dataAppuntamento)) throw new AppuntamentoInesistenteException("errore: non ci sono appuntamenti per quella data ");
+    public ArrayList<Appuntamento> elencoAppuntamentiOrdinatiPerData(Agenda agenda) throws InputErratiException, AgendaInesistenteException {
+        if(agenda==null) throw new InputErratiException("errore:dati inseriti non corretti");
+        if(!this.listaAgende.contains(agenda)) throw new AgendaInesistenteException("errore: agenda non esistente");
         Collections.sort(agenda.listaAppuntamentiDiUnAgenda);
        return agenda.listaAppuntamentiDiUnAgenda;
     }
